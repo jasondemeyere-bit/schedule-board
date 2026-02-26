@@ -3,86 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comprehensive Planning Board</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Resource Scheduling Board</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { display: flex; }
+        .resource-list { width: 200px; margin-right: 20px; }
+        .timeline { flex-grow: 1; }
+        .hour-slot { height: 50px; border: 1px solid #ccc; position: relative; }
+        .appointment { position: absolute; background-color: #4CAF50; color: white; padding: 5px; border-radius: 3px; }
+        .draggable { cursor: move; }
+        .stats { margin-top: 20px; }
+        /* Add more styles as needed */
+    </style>
 </head>
 <body>
     <div class="container">
-        <aside class="sidebar">
-            <h2>Create a Task</h2>
-            <form id="taskForm">
-                <label for="taskTitle">Title:</label>
-                <input type="text" id="taskTitle" required>
-                <label for="taskDescription">Description:</label>
-                <textarea id="taskDescription" required></textarea>
-                <label for="taskDueDate">Due Date:</label>
-                <input type="datetime-local" id="taskDueDate">
-                <label for="taskStatus">Status:</label>
-                <select id="taskStatus">
-                    <option value="pending">Pending</option>
-                    <option value="completed">Completed</option>
-                </select>
-                <button type="submit">Add Task</button>
+        <div class="resource-list">
+            <h3>Appointment Requests</h3>
+            <form id="appointment-form">
+                <input type="text" placeholder="Request Name" required />
+                <input type="number" placeholder="Duration (mins)" required />
+                <button type="submit">Add Request</button>
             </form>
-        </aside>
-        <main class="views">
-            <header>
-                <h1>Planning Board</h1>
-                <nav>
-                    <button id="dayViewButton">Day</button>
-                    <button id="weekViewButton">Week</button>
-                    <button id="workweekViewButton">Workweek</button>
-                    <button id="monthViewButton">Month</button>
-                </nav>
-            </header>
-            <section id="taskBoard">
-                <!-- Dynamic Task Views Will Be Rendered Here -->
-            </section>
-        </main>
+            <h3>Resources</h3>
+            <ul>
+                <li>Room A</li>
+                <li>Room B</li>
+                <li>Conference Room</li>
+                <li>Meeting Hall</li>
+            </ul>
+            <div class="navigation">
+                <button id="prev-day">Previous Day</button>
+                <button id="next-day">Next Day</button>
+                <button id="today">Today</button>
+            </div>
+        </div>
+        <div class="timeline">
+            <h3>Timeline</h3>
+            <div id="timeline"> 
+                <!-- Dynamically create time slots here -->
+            </div>
+        </div>
     </div>
-
-    <script src="script.js"></script>
+    <div class="stats">
+        <h3>Statistics</h3>
+        <p>Pending Appointments: <span id="pending-count">0</span></p>
+        <p>Scheduled Appointments: <span id="scheduled-count">0</span></p>
+    </div>
+    <script>
+        // Code for drag-and-drop, localStorage, conflict detection, and more
+        // Functionality to be implemented
+        document.getElementById('appointment-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Logic to add appointment, handle local storage, and update counts
+        });
+    </script>
 </body>
 </html>
-
-/* styles.css */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background: linear-gradient(to right, #6a11cb, #2575fc);
-    color: #fff;
-}
-.container {
-    display: flex;
-    height: 100vh;
-}
-.sidebar {
-    width: 300px;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    overflow-y: auto;
-}
-.views {
-    flex-grow: 1;
-    padding: 20px;
-    overflow-y: auto;
-}
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-nav button {
-    margin: 0 5px;
-    padding: 10px;
-    border: none;
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-}
-nav button:hover {
-    background: rgba(255, 255, 255, 0.5);
-    transition: background 0.3s;
-}
-/* Additional CSS for task styles, modal, scrolling, etc. */
