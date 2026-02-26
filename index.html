@@ -3,79 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planning Board</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
-        #board { display: flex; }
-        .view { flex: 1; margin: 10px; padding: 20px; border: 1px solid #ccc; border-radius: 5px; }
-        h2 { text-align: center; }
-        .task { padding: 10px; margin: 5px; background: #f0f0f0; border: 1px solid #ddd; cursor: grab; }
-        .task.dragging { opacity: 0.5; }
-        input, select, button { margin: 5px; }
-    </style>
+    <title>Comprehensive Planning Board</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Planning Board</h1>
-    <div id="board">
-        <div class="view" id="day-view"><h2>Day View</h2></div>
-        <div class="view" id="week-view"><h2>Week View</h2></div>
-        <div class="view" id="month-view"><h2>Month View</h2></div>
+    <div class="container">
+        <aside class="sidebar">
+            <h2>Create a Task</h2>
+            <form id="taskForm">
+                <label for="taskTitle">Title:</label>
+                <input type="text" id="taskTitle" required>
+                <label for="taskDescription">Description:</label>
+                <textarea id="taskDescription" required></textarea>
+                <label for="taskDueDate">Due Date:</label>
+                <input type="datetime-local" id="taskDueDate">
+                <label for="taskStatus">Status:</label>
+                <select id="taskStatus">
+                    <option value="pending">Pending</option>
+                    <option value="completed">Completed</option>
+                </select>
+                <button type="submit">Add Task</button>
+            </form>
+        </aside>
+        <main class="views">
+            <header>
+                <h1>Planning Board</h1>
+                <nav>
+                    <button id="dayViewButton">Day</button>
+                    <button id="weekViewButton">Week</button>
+                    <button id="workweekViewButton">Workweek</button>
+                    <button id="monthViewButton">Month</button>
+                </nav>
+            </header>
+            <section id="taskBoard">
+                <!-- Dynamic Task Views Will Be Rendered Here -->
+            </section>
+        </main>
     </div>
-    <div>
-        <input type="text" id="task-title" placeholder="Task Title">
-        <select id="task-category">
-            <option value="work">Work</option>
-            <option value="personal">Personal</option>
-        </select>
-        <input type="number" id="task-priority" min="1" max="5" placeholder="Priority">
-        <button id="add-task">Add Task</button>
-    </div>
-    <script>
-        const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-        const dayView = document.getElementById('day-view');
-        const weekView = document.getElementById('week-view');
-        const monthView = document.getElementById('month-view');
 
-        function renderTasks() {
-            dayView.innerHTML = '<h2>Day View</h2>' + tasks.map(task => 
-                `<div class="task" draggable="true" data-title="${task.title}" data-category="${task.category}" data-priority="${task.priority}">${task.title} - ${task.category} (Priority ${task.priority})</div>`
-            ).join('');
-            attachDragEvents();
-        }
-
-        document.getElementById('add-task').addEventListener('click', () => {
-            const title = document.getElementById('task-title').value;
-            const category = document.getElementById('task-category').value;
-            const priority = document.getElementById('task-priority').value;
-
-            if (title) {
-                tasks.push({ title, category, priority });
-                localStorage.setItem('tasks', JSON.stringify(tasks));
-                renderTasks();
-                document.getElementById('task-title').value = '';
-            }
-        });
-
-        function attachDragEvents() {
-            const taskElements = document.querySelectorAll('.task');
-            taskElements.forEach(task => {
-                task.addEventListener('dragstart', () => {
-                    task.classList.add('dragging');
-                });
-                task.addEventListener('dragend', () => {
-                    task.classList.remove('dragging');
-                });
-                task.addEventListener('dragover', (e) => {
-                    e.preventDefault();
-                    const draggingTask = document.querySelector('.dragging');
-                    if (task !== draggingTask) {
-                        task.parentNode.insertBefore(draggingTask, task);
-                    }
-                });
-            });
-        }
-
-        renderTasks();
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
+
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    color: #fff;
+}
+.container {
+    display: flex;
+    height: 100vh;
+}
+.sidebar {
+    width: 300px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    overflow-y: auto;
+}
+.views {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+nav button {
+    margin: 0 5px;
+    padding: 10px;
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+nav button:hover {
+    background: rgba(255, 255, 255, 0.5);
+    transition: background 0.3s;
+}
+/* Additional CSS for task styles, modal, scrolling, etc. */
