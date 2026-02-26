@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Planning Board</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .sidebar { width: 250px; float: left; padding: 10px; }
+        .main { margin-left: 260px; padding: 10px; }
+        .task { position: relative; padding: 5px; border: 1px solid #ccc; margin: 5px; }
+        .task:hover { border-color: #66f; }
+        .resize-handle { width: 10px; height: 100%; position: absolute; right: 0; cursor: ew-resize; }
+        /* Custom scrollbars */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-thumb { background: #888; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        @media (max-width: 768px) {
+            .sidebar { width: 100%; float: none; }
+            .main { margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Add Task</h2>
+        <form id="task-form">
+            <input type="text" id="title" placeholder="Title" required />
+            <input type="date" id="date" required />
+            <input type="time" id="start-time" required />
+            <input type="time" id="end-time" required />
+            <select id="category">
+                <option value="work">Work</option>
+                <option value="personal">Personal</option>
+                <option value="other">Other</option>
+            </select>
+            <select id="priority">
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+            </select>
+            <textarea id="description" placeholder="Description"></textarea>
+            <button type="submit">Add Task</button>
+        </form>
+    </div>
+    <div class="main">
+        <h1>Advanced Planning Board</h1>
+        <button onclick="changeView('day')">Day</button>
+        <button onclick="changeView('week')">Week</button>
+        <button onclick="changeView('workweek')">Workweek</button>
+        <button onclick="changeView('month')">Month</button>
+        <button onclick="changeView('custom')">Custom Range</button>
+        <div id="task-container" style="overflow-y: auto; height: 600px;">
+            <!-- Tasks will be rendered here -->
+        </div>
+    </div>
+    <script>
+        const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        const taskContainer = document.getElementById('task-container');
+        const taskForm = document.getElementById('task-form');
+
+        // Function to render tasks
+        function renderTasks() {
+            taskContainer.innerHTML = '';
+            tasks.forEach((task, index) => {
+                const div = document.createElement('div');
+                div.className = 'task';
+                div.innerHTML = `<strong>${task.title}</strong><br/>${task.date} ${task.start} - ${task.end}<br/>${task.category} | ${task.priority}<div class='resize-handle' data-index='${index}'></div>`;
+                taskContainer.appendChild(div);
+            });
+        }
+
+        // Handle task submission
+        taskForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const newTask = {
+                title: document.getElementById('title').value,
+                date: document.getElementById('date').value,
+                start: document.getElementById('start-time').value,
+                end: document.getElementById('end-time').value,
+                category: document.getElementById('category').value,
+                priority: document.getElementById('priority').value,
+                description: document.getElementById('description').value
+            };
+            tasks.push(newTask);
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+            renderTasks();
+            taskForm.reset();
+        });
+
+        window.onload = renderTasks;
+
+        function changeView(view) {
+            console.log('Changing view to:', view);
+            // Logic for handling different views would be implemented here
+        }
+    </script>
+</body>
+</html>
